@@ -1,0 +1,84 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 0;
+// internalField  #codeStream  /* Use of codeStream to initialize p field */
+// {
+//   codeInclude  /* Headers for compilation */
+//   #{
+//   #include "fvCFD.H"
+//   #};
+
+//   codeOptions /* Compilation options */
+//   #{
+//     -I$(FOAM_SRC)/finiteVolume/lnInclude \
+//     -I$(FOAM_SRC)/meshTools/lnInclude 
+//   #};
+
+//   codeLibs  /* Libraries for compilation */
+//   #{
+//     -lmeshTools \
+//     -lfiniteVolume
+//   #};
+
+//   code  /* User code */
+//   #{
+//     /* Access to internal mesh information */
+//     const IOdictionary& d = static_cast<const IOdictionary&>(dict);
+//     const fvMesh& mesh = refCast<const fvMesh>(d.db());
+
+//     scalarField p(mesh.nCells(), 0.); /* initialization */
+
+//     /* User variables initialization */
+//     const scalar L = 550e-3;
+//     const scalar g = 9.81;
+//     const scalar H = 0.4;    // H — характерная высота
+
+
+//     forAll(p, i) /* Loop on elements */
+//     {
+//       const scalar z = mesh.C()[i][2]; /* Access to z component of cell centers coordinates */
+//       p[i] = ;
+//     }
+
+//     p.writeEntry("", os); /* Write output in the dictionary */
+
+//   #};
+// };
+
+boundaryField
+{
+    inlet
+    {
+        type            zeroGradient;
+    }
+
+    outlet
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+
+    pipe
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //

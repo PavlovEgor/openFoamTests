@@ -1,0 +1,151 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale 0.001;
+
+D       9; // [mm] lenght of cone
+delta   0.5; // [mm] biggest radiuse of cone
+H       100;
+
+
+vertices
+(
+    //block0 vertices
+    (0 #eval{$D/2 - $delta} 0) // 0
+    (0 #eval{$D/2} 0) // 1
+    (#eval{$D/2} 0 0) // 2
+    (#eval{$D/2 - $delta} 0 0) // 3
+    (0 #eval{$D/2 - $delta} $H) // 4
+    (0 #eval{$D/2} $H) // 5
+    (#eval{$D/2} 0 $H) // 6
+    (#eval{$D/2 - $delta} 0 $H) // 7
+
+    //block1 new vertices
+    (0 -#eval{$D/2 - $delta} 0) // 8
+    (0 -#eval{$D/2} 0) // 9
+    (0 -#eval{$D/2 - $delta} $H) // 10
+    (0 -#eval{$D/2} $H) // 11
+
+    //block3 new vertices
+    (-#eval{$D/2 - $delta} 0 0) // 12
+    (-#eval{$D/2} 0 0) // 13
+    (-#eval{$D/2 - $delta} 0 $H) // 14
+    (-#eval{$D/2} 0 $H) // 15
+);
+
+// xcells 10;
+// ycells 100;
+// zcells 500;
+xcells 150;
+ycells 30;
+zcells 1;
+
+
+stretch 1;
+
+blocks
+(
+    //block0
+    hex (0 3 2 1 4 7 6 5) ($xcells $ycells $zcells) simpleGrading (1 $stretch 1)
+    //block1
+    hex (3 8 9 2 7 10 11 6)  ($xcells $ycells $zcells) simpleGrading (1 $stretch 1)
+    //block2
+    hex (8 12 13 9 10 14 15 11) ($xcells $ycells $zcells) simpleGrading (1 $stretch 1)
+    //block3
+    hex  (12 0 1 13 14 4 5 15) ($xcells $ycells $zcells) simpleGrading (1 $stretch 1)
+);
+
+edges
+(
+    //block0 arc
+    arc 1 2 (#eval{$D/(2 * sqrt(2))} #eval{$D/(2 * sqrt(2))} 0)
+    arc 5 6 (#eval{$D/(2 * sqrt(2))} #eval{$D/(2 * sqrt(2))} $H)
+    arc 0 3 (#eval{($D/2 - $delta) / sqrt(2)} #eval{($D/2 - $delta) / sqrt(2)} 0)
+    arc 4 7 (#eval{($D/2 - $delta) / sqrt(2)} #eval{($D/2 - $delta) / sqrt(2)} $H)
+
+    //block1 arc
+    arc 2 9 (#eval{$D/(2 * sqrt(2))} -#eval{$D/(2 * sqrt(2))} 0)
+    arc 6 11 (#eval{$D/(2 * sqrt(2))} -#eval{$D/(2 * sqrt(2))} $H)
+    arc 3 8 (#eval{($D/2 - $delta) / sqrt(2)} -#eval{($D/2 - $delta) / sqrt(2)} 0)
+    arc 7 10 (#eval{($D/2 - $delta) / sqrt(2)} -#eval{($D/2 - $delta) / sqrt(2)} $H)
+
+    //block2 arc
+    arc 9 13 (-#eval{$D/(2 * sqrt(2))} -#eval{$D/(2 * sqrt(2))} 0)
+    arc 11 15 (-#eval{$D/(2 * sqrt(2))} -#eval{$D/(2 * sqrt(2))} $H)
+    arc 8 12 (-#eval{($D/2 - $delta) / sqrt(2)} -#eval{($D/2 - $delta) / sqrt(2)} 0)
+    arc 10 14 (-#eval{($D/2 - $delta) / sqrt(2)} -#eval{($D/2 - $delta) / sqrt(2)} $H)
+
+    //block3 arc
+    arc 13 1 (-#eval{$D/(2 * sqrt(2))} #eval{$D/(2 * sqrt(2))} 0)
+    arc 15 5 (-#eval{$D/(2 * sqrt(2))} #eval{$D/(2 * sqrt(2))} $H)
+    arc 12 0 (-#eval{($D/2 - $delta) / sqrt(2)} #eval{($D/2 - $delta) / sqrt(2)} 0)
+    arc 14 4 (-#eval{($D/2 - $delta) / sqrt(2)} #eval{($D/2 - $delta) / sqrt(2)} $H)
+);
+
+boundary
+(
+    inlet
+    {
+        type empty;
+        faces
+        (
+            (0 1 2 3)
+            (2 3 8 9)
+            (8 9 13 12)
+            (13 12 0 1)
+        );
+    }
+
+    outlet
+    {
+        type empty;
+        faces
+        (
+            (4 5 6 7)
+            (6 7 10 11)
+            (15 11 10 14)
+            (15 14 4 5)
+        );
+    }
+
+    outerWall
+    {
+        type wall;
+        faces
+        (
+            (1 5 6 2)
+            (2 6 11 9)
+            (9 11 15 13)
+            (15 13 5 1)
+        );
+    }
+
+    innerWall
+    {
+        type wall;
+        faces
+        (
+            (0 4 7 3)
+            (3 7 10 8)
+            (8 10 14 12)
+            (12 14 4 0)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);

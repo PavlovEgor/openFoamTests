@@ -1,0 +1,85 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0.630957344480193);
+// internalField  #codeStream  /* Use of codeStream to initialize p field */
+// {
+//   codeInclude  /* Headers for compilation */
+//   #{
+//   #include "fvCFD.H"
+//   #};
+
+//   codeOptions /* Compilation options */
+//   #{
+//     -I$(FOAM_SRC)/finiteVolume/lnInclude \
+//     -I$(FOAM_SRC)/meshTools/lnInclude 
+//   #};
+
+//   codeLibs  /* Libraries for compilation */
+//   #{
+//     -lmeshTools \
+//     -lfiniteVolume
+//   #};
+
+//   code  /* User code */
+//   #{
+//     /* Access to internal mesh information */
+//     const IOdictionary& d = static_cast<const IOdictionary&>(dict);
+//     const fvMesh& mesh = refCast<const fvMesh>(d.db());
+
+//     vectorField U(mesh.nCells(), 0.); /* initialization */
+
+//     /* User variables initialization */
+//     const scalar L = 550e-3;
+//     const scalar R = 0.005;
+//     const scalar U_ave = 0.630957344480193;
+
+//     forAll(U, i) /* Loop on elements */
+//     {
+//       const scalar x = mesh.C()[i][0]; /* Access to z component of cell centers coordinates */
+//       const scalar y = mesh.C()[i][1]; /* Access to z component of cell centers coordinates */
+
+//       U[i][2] = 2 * U_ave * (1 - Foam::sqrt(x ** 2 + y ** 2) / R);
+//     }
+
+//     U.writeEntry("", os); /* Write output in the dictionary */
+
+//   #};
+// };
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform (0 0 2.8480358684357987);
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    pipe
+    {
+        type            noSlip;
+    }
+}
+
+
+// ************************************************************************* //

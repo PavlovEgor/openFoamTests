@@ -1,0 +1,92 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p
+    {
+        solver  GAMG;
+        smoother        GaussSeidel;
+        relTol  1.0E-4;
+        cacheAgglomeration      true;
+        nFinestSweeps   2;
+        nPreSweeps      0;
+        maxIter 1000;
+        nPostSweeps     1;
+        agglomerator    faceAreaPair;
+        nCellsInCoarsestLevel   10;
+        tolerance       1.0E-7;
+        mergeLevels     1;
+    }
+
+    pFinal
+    {
+        solver  GAMG;
+        smoother        GaussSeidel;
+        relTol  1.0E-4;
+        cacheAgglomeration      true;
+        nFinestSweeps   2;
+        nPreSweeps      0;
+        maxIter 1000;
+        nPostSweeps     1;
+        agglomerator    faceAreaPair;
+        nCellsInCoarsestLevel   10;
+        tolerance       1.0E-7;
+        mergeLevels     1;
+        minIter 1;
+    }
+
+    "(U|k|epsilon)"
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-07;
+        relTol          0.001;
+    }
+
+    cellDisplacement
+    {
+        $p;
+        relTol          0;
+    }
+}
+
+SIMPLE
+{
+    nNonOrthogonalCorrectors 2;
+    // pRefCell        0;
+    // pRefValue       0;
+
+    residualControl
+    {
+        p               1e-2;
+        U               1e-4;
+
+        // possibly check turbulence fields
+        "(k|epsilon|omega)" 1e-3;
+    }
+}
+
+relaxationFactors
+{
+    fields { p           0.7;
+    }
+    equations { U        0.56;
+        "(k|epsilon)"   0.7;
+    }
+}
+
+// ************************************************************************* //
