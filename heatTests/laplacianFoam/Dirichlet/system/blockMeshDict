@@ -34,13 +34,12 @@ vertices
     (#eval{$D/2 - $delta} 0 $H) // 7
 );
 
-ycells 3;
-xcells 45;
-zcells 1;
-// xcells 45;
-// ycells 3;
+ycells 2;
+xcells 30;
+zcells 300;
+// xcells 4;
+// ycells 8;
 // zcells 440;
-
 
 stretch 1;
 
@@ -61,12 +60,20 @@ edges
 
 boundary
 (
-    emptyZ
+    inlet
     {
-        type empty;
+        type patch;
         faces
         (
             (0 1 2 3)
+        );
+    }
+
+    outlet
+    {
+        type patch;
+        faces
+        (
             (4 5 6 7)
         );
     }

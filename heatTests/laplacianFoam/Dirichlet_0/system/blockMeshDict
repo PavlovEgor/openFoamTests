@@ -1,0 +1,121 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale 0.001;
+
+D       9; // [mm] lenght of cone
+delta   0.5; // [mm] biggest radiuse of cone
+H       100;
+
+
+vertices
+(
+    //block0 vertices
+    (0 #eval{$D/2 - $delta} 0) // 0
+    (0 #eval{$D/2} 0) // 1
+    (#eval{$D/2} 0 0) // 2
+    (#eval{$D/2 - $delta} 0 0) // 3
+    (0 #eval{$D/2 - $delta} $H) // 4
+    (0 #eval{$D/2} $H) // 5
+    (#eval{$D/2} 0 $H) // 6
+    (#eval{$D/2 - $delta} 0 $H) // 7
+);
+
+ycells 2;
+xcells 30;
+zcells 300;
+// xcells 30;
+// ycells 2;
+// zcells 300;
+
+stretch 1;
+
+blocks
+(
+    hex (0 3 2 1 4 7 6 5) ($xcells $ycells $zcells) simpleGrading (1 $stretch 1)
+);
+
+edges
+(
+
+    arc 1 2 (#eval{$D/(2 * sqrt(2))} #eval{$D/(2 * sqrt(2))} 0)
+    arc 5 6 (#eval{$D/(2 * sqrt(2))} #eval{$D/(2 * sqrt(2))} $H)
+    arc 0 3 (#eval{($D/2 - $delta) / sqrt(2)} #eval{($D/2 - $delta) / sqrt(2)} 0)
+    arc 4 7 (#eval{($D/2 - $delta) / sqrt(2)} #eval{($D/2 - $delta) / sqrt(2)} $H)
+
+);
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 1 2 3)
+        );
+    }
+
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (4 5 6 7)
+        );
+    }
+
+    outerWall
+    {
+        type wall;
+        faces
+        (
+            (1 5 6 2)
+        );
+    }
+
+    innerWall
+    {
+        type wall;
+        faces
+        (
+            (0 4 7 3)
+        );
+    }
+
+    sym1
+    {
+        type symmetryPlane;
+
+        faces
+        (
+            (0 1 5 4)
+        );
+    }
+    sym2
+    {
+        type symmetryPlane;
+
+        faces
+        (
+            (3 2 6 7)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);

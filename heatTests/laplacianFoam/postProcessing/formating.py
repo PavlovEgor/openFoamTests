@@ -26,7 +26,10 @@ def setMeshShape(path, mesh_shape=(2, 30, 1)):
                    filename="system/blockMeshDict",
                    pattern=r"xcells (\d+);",
                    replacement=f"xcells {mesh_shape[1]};")
-
+    setXtoY_inFile(path, 
+                   filename="system/blockMeshDict",
+                   pattern=r"zcells (\d+);",
+                   replacement=f"zcells {mesh_shape[2]};")
 
 
 def createCaseIFromCase(newCasePath,

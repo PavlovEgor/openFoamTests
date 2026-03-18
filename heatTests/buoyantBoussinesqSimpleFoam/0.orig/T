@@ -20,9 +20,14 @@ internalField   uniform 250;
 
 boundaryField
 {
-    "(inlet|outlet)"
+    emptyZ
     {
         type            empty;
+    }
+
+    "(sym1|sym2)"
+    {
+        type            symmetryPlane;
     }
 
     outerWall
@@ -44,5 +49,6 @@ boundaryField
     //     value           uniform 300;
     // }
 }
+
 
 // ************************************************************************* //

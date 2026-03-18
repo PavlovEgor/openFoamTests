@@ -20,9 +20,9 @@ internalField   uniform 250;
 
 boundaryField
 {
-    emptyZ
+    "(inlet|outlet)"
     {
-        type            empty;
+        type            zeroGradient;
     }
 
     "(sym1|sym2)"
@@ -41,13 +41,6 @@ boundaryField
         type            fixedValue;
         value           uniform 300;
     }
-
-    // innerWall
-    // {
-    //     type            fixedGradient;
-    //     gradient        uniform 52e3;
-    //     value           uniform 300;
-    // }
 }
 
 
