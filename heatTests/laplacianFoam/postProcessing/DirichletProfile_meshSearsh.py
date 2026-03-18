@@ -50,7 +50,7 @@ if __name__ == "__main__":
     deltaSTs = np.zeros(len(rCells_))
     Time = np.zeros(len(rCells_))
 
-    with Pool(processes=6) as pool:  # По умолчанию использует все ядра CPU
+    with Pool(processes=1) as pool:  # По умолчанию использует все ядра CPU
         pool.map(processIter, rCells_)
 
     for rCells in rCells_:

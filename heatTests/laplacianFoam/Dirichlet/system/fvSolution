@@ -18,10 +18,32 @@ solvers
 {
     T
     {
-        solver          PCG;
-        preconditioner  DIC;
-        tolerance       1e-06;
-        relTol          0;
+        solver            AmgX;
+        mode              dDDI;
+        dataLocation      device;
+
+        AmgXconfig
+        {
+            config_version      2;
+            
+            solver
+            {
+                scope               "main";
+                solver              PCG;
+                max_iters           100;
+                tolerance           1e-06;
+                norm                L2;
+                convergence         RELATIVE_INI;
+                monitor_residual    1;
+                store_res_history   1;
+
+                preconditioner
+                {
+                    scope               "precond";
+                    solver              MULTICOLOR_DILU;
+                }
+            }
+        }
     }
 }
 
@@ -30,7 +52,7 @@ SIMPLE
     nNonOrthogonalCorrectors 2;
     residualControl
     {
-        T               1e-4;
+        T               1e-6;
     }
 }
 
