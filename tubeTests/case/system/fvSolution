@@ -18,43 +18,91 @@ solvers
 {
     p
     {
-        solver  GAMG;
-        smoother        GaussSeidel;
-        relTol  1.0E-4;
-        cacheAgglomeration      true;
-        nFinestSweeps   2;
-        nPreSweeps      0;
-        maxIter 1000;
-        nPostSweeps     1;
-        agglomerator    faceAreaPair;
-        nCellsInCoarsestLevel   10;
-        tolerance       1.0E-7;
-        mergeLevels     1;
+        solver            AmgX;
+        mode              dDDI;
+        dataLocation      device;
+
+        // AmgXconfigPath       "$WM_PROJECT_USER_DIR/run/openFoamTests/tubeTests/case/system/FGMRES_CLASSICAL_AGGRESSIVE_PMIS.json";
+    AmgXconfig
+    {
+        config_version      2;
+        
+        solver
+        {
+            scope               "main";
+            solver              FGMRES;
+            max_iters           100;
+            tolerance           1e-6;
+            norm                L2;
+            convergence         RELATIVE_INI;
+            monitor_residual    1;        
+            // print_solve_stats   1;
+            // obtain_timings      1;
+            gmres_n_restart     20;
+            store_res_history   1;
+            
+            preconditioner
+            {
+                scope               "amg";
+                solver              AMG;
+                max_iters           1;
+                cycle               V;
+                presweeps           1;
+                postsweeps          1;
+                interpolator        D2;
+                monitor_residual    1;        
+                store_res_history   1;        
+                print_solve_stats   0;
+                // print_grid_stats    1;
+                print_vis_data      0;
+            }
+        }
+    }
     }
 
-    pFinal
-    {
-        solver  GAMG;
-        smoother        GaussSeidel;
-        relTol  1.0E-4;
-        cacheAgglomeration      true;
-        nFinestSweeps   2;
-        nPreSweeps      0;
-        maxIter 1000;
-        nPostSweeps     1;
-        agglomerator    faceAreaPair;
-        nCellsInCoarsestLevel   10;
-        tolerance       1.0E-7;
-        mergeLevels     1;
-        minIter 1;
-    }
 
-    "(U|k|epsilon)"
+    "(U|Ux|Uy|Uz|k|epsilon)"
     {
-        solver          PBiCGStab;
-        preconditioner  DILU;
-        tolerance       1e-07;
-        relTol          0.001;
+        solver            AmgX;
+        mode              dDDI;
+        dataLocation      device;
+
+        // AmgXconfigPath       "$WM_PROJECT_USER_DIR/run/openFoamTests/tubeTests/case/system/PBICGSTAB_CLASSICAL_JACOBI.json";
+    AmgXconfig
+    {
+        config_version      2;
+        
+        solver
+        {
+            scope               "main";
+            solver              FGMRES;
+            max_iters           100;
+            tolerance           1e-6;
+            norm                L2;
+            convergence         RELATIVE_INI;
+            monitor_residual    1;        
+            // print_solve_stats   1;
+            // obtain_timings      1;
+            gmres_n_restart     20;
+            store_res_history   1;
+            
+            preconditioner
+            {
+                scope               "amg";
+                solver              AMG;
+                max_iters           1;
+                cycle               V;
+                presweeps           1;
+                postsweeps          1;
+                interpolator        D2;
+                monitor_residual    1;        
+                store_res_history   1;        
+                print_solve_stats   0;
+                // print_grid_stats    1;
+                print_vis_data      0;
+            }
+        }
+    }
     }
 
     cellDisplacement
@@ -67,16 +115,12 @@ solvers
 SIMPLE
 {
     nNonOrthogonalCorrectors 2;
-    // pRefCell        0;
-    // pRefValue       0;
 
     residualControl
     {
-        p               1e-2;
-        U               1e-4;
-
-        // possibly check turbulence fields
-        "(k|epsilon|omega)" 1e-3;
+        p               1e-4;
+        "(U|Ux|Uy|Uz)"             1e-6;
+        "(k|epsilon|omega)" 1e-6;
     }
 }
 
@@ -84,7 +128,7 @@ relaxationFactors
 {
     fields { p           0.7;
     }
-    equations { U               0.65;
+    equations { "(U|Ux|Uy|Uz)"               0.65;
         "(k|epsilon)"   0.7;
     }
 }
