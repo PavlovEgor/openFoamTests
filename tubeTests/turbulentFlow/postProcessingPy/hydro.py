@@ -72,3 +72,6 @@ def IdelchikLow(Re, l0, Delta=1e-3):
 
     return root
 
+
+if __name__=="__main__":
+    print(PrandlLow(1e5))

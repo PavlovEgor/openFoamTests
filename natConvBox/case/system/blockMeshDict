@@ -1,0 +1,92 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale       1.0;
+
+L           0.0781;
+N           100;
+
+
+vertices
+(
+    (0 0 0)     // 0 - нижний левый перед
+    ($L 0 0)     // 1 - нижний правый перед
+    ($L $L 0)     // 2 - верхний правый перед
+    (0 $L 0)     // 3 - верхний левый перед
+    (0 0    #eval{0.1 * $L})   // 4 - нижний левый зад
+    ($L 0   #eval{0.1 * $L})   // 5 - нижний правый зад
+    ($L $L  #eval{0.1 * $L})   // 6 - верхний правый зад
+    (0 $L   #eval{0.1 * $L})   // 7 - верхний левый зад
+);
+
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) ($N $N 1) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    bottom
+    {
+        type wall;
+        faces
+        (
+            (0 1 5 4)  // Грань: Z=0, Y=0, X от 0 до 1
+        );
+    }
+    top
+    {
+        type wall;
+        faces
+        (
+            (2 3 7 6)  // Грань: Z=0, Y=1, X от 0 до 1
+        );
+    }
+    left
+    {
+        type wall;
+        faces
+        (
+            (0 3 7 4)  // Грань: X=0
+        );
+    }
+    right
+    {
+        type wall;
+        faces
+        (
+            (1 2 6 5)  // Грань: X=1
+        );
+    }
+    frontAndBack
+    {
+        type empty;
+        faces
+        (
+            (0 1 2 3)  // Передняя грань (Z=0)
+            (4 5 6 7)  // Задняя грань (Z=0.1)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
