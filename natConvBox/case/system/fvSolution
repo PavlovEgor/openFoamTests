@@ -32,7 +32,7 @@ solvers
         mergeLevels     1;
     }
 
-    "(U|T|k|epsilon)"
+    "(U|T)"
     {
         solver          PBiCGStab;
         smoother        GaussSeidel;
@@ -45,15 +45,15 @@ solvers
 SIMPLE
 {
 
-    nNonOrthogonalCorrectors 5;
+    nNonOrthogonalCorrectors 2;
     pRefCell        0;
     pRefValue       0;
 
     residualControl
     {
         p_rgh           1e-2;
-        U               1e-4;
-        T               1e-4;
+        U               1e-3;
+        T               1e-3;
     }
 }
 

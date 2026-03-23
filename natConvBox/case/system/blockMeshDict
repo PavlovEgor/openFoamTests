@@ -17,7 +17,7 @@ FoamFile
 scale       1.0;
 
 L           0.0781;
-N           100;
+N 100;
 
 
 vertices

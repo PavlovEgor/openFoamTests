@@ -9,6 +9,6 @@ runApplication blockMesh
 
 runApplication $(getApplication)
 
-postProcess -func writeCellCentres
+# postProcess -func writeCellCentres
 
 #------------------------------------------------------------------------------
