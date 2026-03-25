@@ -18,7 +18,7 @@ def processIter(N):
     path = f"../case_{N}/"
 
     formating.createCaseIFromCase(newCasePath=path,
-                            baseCasePath="../case/")
+                            baseCasePath="../case2D/")
 
     formating.setMeshSize(path, N)
 

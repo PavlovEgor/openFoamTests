@@ -51,9 +51,9 @@ SIMPLE
 
     residualControl
     {
-        p_rgh           1e-2;
-        U               1e-3;
-        T               1e-3;
+        p_rgh           1e-7;
+        U               1e-7;
+        T               1e-7;
     }
 }
 
