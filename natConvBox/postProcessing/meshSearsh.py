@@ -10,7 +10,6 @@ import shutil
 import glob
 from functools import partial
 import os
-import time
 
 
 def processIter(N):
@@ -18,22 +17,16 @@ def processIter(N):
     path = f"../case_{N}/"
 
     formating.createCaseIFromCase(newCasePath=path,
-                            baseCasePath="../case/")
+                            baseCasePath="../caseCPU/")
 
     formating.setMeshSize(path, N)
 
     subprocess.run([path + "Allclean"])
-    t1 = time.time()
     subprocess.run([path + "Allrun"], check=True)
-    dt = time.time() - t1
 
-    T, T_name = formating.find_time(path)
+    itNum, dt = formating.get_last_simulation_time(path + "log.buoyantBoussinesqSimpleFoam")
 
-    # Temp = Ofpp.parse_internal_field(path + T_name[-1] + "/T")
-    # Cx = Ofpp.parse_internal_field(path + T_name[-1] + "/Cx")
-    # Cy = Ofpp.parse_internal_field(path + T_name[-1] + "/Cy")
-
-    np.savetxt(f"case_{N}.txt", np.array([N, dt, int(T[-1])]))
+    np.savetxt(f"case_{N}.txt", np.array([N, dt, itNum]))
 
     shutil.rmtree(path)
 
@@ -43,14 +36,18 @@ if __name__ == "__main__":
     Time = np.zeros(len(Ns))
     itNums = np.zeros(len(Ns))
 
-    with Pool(processes=6) as pool:  # По умолчанию использует все ядра CPU
+    with Pool(processes=4) as pool:  # По умолчанию использует все ядра CPU
         pool.map(processIter, Ns)
+    
+    for ns in Ns:
+        processIter(ns)
 
     for i, N in enumerate(Ns):
         _, dt, itNum = np.loadtxt(f"case_{N}.txt")
         Time[i] = dt
         itNums[i] = itNum
 
-        os.remove(f"case_{N}.txt")
-
     np.savetxt("data.txt", np.array([Ns, Time, itNums]).T)
+
+    for i, N in enumerate(Ns):
+        os.remove(f"case_{N}.txt")

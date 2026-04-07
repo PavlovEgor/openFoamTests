@@ -66,3 +66,25 @@ def find_time(dir_name=''):
     sorted_combined = sorted(combined, key=lambda x: x[0])
 
     return zip(*sorted_combined)
+
+
+
+def get_last_simulation_time(log_file):
+    """Извлекает последние значения Time и ExecutionTime из лог-файла"""
+    
+    with open(log_file, 'r') as f:
+        content = f.read()
+    
+    # Ищем все вхождения Time = X
+    time_pattern = r'^Time\s*=\s*(\d+)' 
+    times = re.findall(time_pattern, content, re.MULTILINE)
+    # Ищем все вхождения ExecutionTime
+    exec_pattern = r'ExecutionTime\s*=\s*([\d.]+)\s*s'
+    exec_times = re.findall(exec_pattern, content)
+    
+    if times and exec_times:
+        last_time = int(times[-1])
+        last_exec_time = float(exec_times[-1])
+        return last_time, last_exec_time
+    else:
+        return None, None

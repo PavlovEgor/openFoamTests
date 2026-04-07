@@ -18,27 +18,20 @@ solvers
 {
     p_rgh
     {
-        solver  GAMG;
-        smoother        GaussSeidel;
-        relTol  1.0E-6;
-        cacheAgglomeration      true;
-        nFinestSweeps   2;
-        nPreSweeps      1;
-        maxIter 1000;
-        nPostSweeps     2;
-        agglomerator    faceAreaPair;
-        nCellsInCoarsestLevel   10;
-        tolerance       1.0E-7;
-        mergeLevels     1;
+        solver            AmgX;
+        mode              dDDI;
+        dataLocation      device;
+
+        AmgXconfigPath       "$WM_PROJECT_USER_DIR/run/openFoamTests/natConvBox/caseGPU/system/FGMRES_CLASSICAL_AGGRESSIVE_PMIS.json";
     }
 
-    "(U|T)"
+    "(U|Ux|Uy|T)"
     {
-        solver          PBiCGStab;
-        smoother        GaussSeidel;
-        preconditioner  DILU;
-        tolerance       1e-07;
-        relTol          1e-5;
+        solver            AmgX;
+        mode              dDDI;
+        dataLocation      device;
+
+        AmgXconfigPath       "$WM_PROJECT_USER_DIR/run/openFoamTests/natConvBox/caseGPU/system/PBICGSTAB_CLASSICAL_JACOBI.json";
     }
 }
 
@@ -52,7 +45,7 @@ SIMPLE
     residualControl
     {
         p_rgh           1e-2;
-        U               1e-3;
+        "(U|Ux|Uy)"     1e-3;
         T               1e-3;
     }
 }
@@ -65,7 +58,7 @@ relaxationFactors
     }
     equations
     {
-        U               0.8;
+        "(U|Ux|Uy)"     0.8;
         T               0.9;
     }
 }
