@@ -26,4 +26,6 @@ log.*
 
 Make/linux64GccDPInt32Opt
 
-*/polyMesh/
+polyMesh/
+
+*.zip

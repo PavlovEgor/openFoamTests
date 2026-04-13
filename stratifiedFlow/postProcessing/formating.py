@@ -16,19 +16,34 @@ def setXtoY_inFile(path,
     with open(path + filename, 'w') as file:
         file.write(new_content)
 
-def setMeshSize(path, N=40):
+def setMeshSize(path, ny1=5):
 
     setXtoY_inFile(path, 
                    filename="system/blockMeshDict",
-                   pattern=r"N (\d+);",
-                   replacement=f"N {N};")
+                   pattern=r"ny1 (\d+);",
+                   replacement=f"ny1 {ny1};")
+    
 
-def setL(path, L):
+    
+def setDensityToUniform(path, filename="constant/turbulenceProperties"):
+    setXtoY_inFile(path, 
+                   filename=filename,
+                   pattern=r"(density\s+)\w+;",
+                   replacement=r"\1uniform;")
+    
+
+def setDensityToVariable(path, filename="constant/turbulenceProperties"):
+    setXtoY_inFile(path, 
+                   filename=filename,
+                   pattern=r"(density\s+)\w+;",
+                   replacement=r"\1variable;")
+
+def setW(path, Wname="W1", W=3.0):
 
     setXtoY_inFile(path,
                    "system/blockMeshDict",
-                   pattern=r'L [\d\.]+;',
-                   replacement=f'L {L};')
+                   pattern=rf'{Wname} [\d\.]+;',
+                   replacement=f'{Wname} {W};')
 
 
 def createCaseIFromCase(newCasePath,

@@ -10,38 +10,26 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      controlDict;
+    object      setFieldsDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     buoyantBoussinesqSimpleFoam;
+defaultFieldValues
+(
+    volScalarFieldValue alpha.water 0
+);
 
-startFrom       latestTime;
+regions
+(
+    boxToCell
+    {
+        box (-1e3 -1e3 -1e3) (1e3 0 1e3);  // все ячейки с y <= 0
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }
+);
 
-startTime       0;
-
-stopAt          endTime;
-
-endTime         100000;
-
-deltaT          1;
-
-writeControl    runTime;
-
-writeInterval   100;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
 
 // ************************************************************************* //

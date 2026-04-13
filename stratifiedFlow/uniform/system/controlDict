@@ -14,7 +14,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     buoyantBoussinesqSimpleFoam;
+application     interFoam;
 
 startFrom       latestTime;
 
@@ -22,13 +22,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         100000;
+endTime         15;
 
-deltaT          1;
+deltaT          0.001;
 
-writeControl    runTime;
+writeControl    adjustable;
 
-writeInterval   100;
+writeInterval   0.1;
 
 purgeWrite      0;
 
@@ -42,6 +42,15 @@ timeFormat      general;
 
 timePrecision   6;
 
-runTimeModifiable true;
+runTimeModifiable yes;
+
+adjustTimeStep  on;
+
+maxCo           10;
+
+maxAlphaCo      2;
+
+maxDeltaT       1;
+
 
 // ************************************************************************* //

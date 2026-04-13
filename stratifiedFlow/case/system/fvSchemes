@@ -10,38 +10,47 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      controlDict;
+    object      fvSchemes;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     buoyantBoussinesqSimpleFoam;
+ddtSchemes
+{
+    default         Euler;
+}
 
-startFrom       latestTime;
+gradSchemes
+{
+    default         Gauss linear;
+}
 
-startTime       0;
+divSchemes
+{
+    div(rhoPhi,U)   Gauss linearUpwind grad(U);
+    div(phi,alpha)  Gauss vanLeer;
+    div(phirb,alpha) Gauss linear;
+    div(rhoPhi,k)      Gauss upwind;
+    div(phi,k) Gauss upwind;
+    div(rhoPhi,epsilon) Gauss upwind;
+    div(phi,epsilon) Gauss upwind;
 
-stopAt          endTime;
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
+}
 
-endTime         100000;
+laplacianSchemes
+{
+    default         Gauss linear orthogonal;
+}
 
-deltaT          1;
+interpolationSchemes
+{
+    default         linear;
+}
 
-writeControl    runTime;
+snGradSchemes
+{
+    default         orthogonal;
+}
 
-writeInterval   100;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
 
 // ************************************************************************* //

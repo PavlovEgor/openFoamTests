@@ -10,38 +10,22 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      controlDict;
+    object      turbulenceProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     buoyantBoussinesqSimpleFoam;
+simulationType      RAS;
 
-startFrom       latestTime;
+density             variable;
 
-startTime       0;
+RAS
+{
+    RASModel        kEpsilon;
 
-stopAt          endTime;
+    turbulence      on;
 
-endTime         100000;
+    printCoeffs     on;
+}
 
-deltaT          1;
-
-writeControl    runTime;
-
-writeInterval   100;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
 
 // ************************************************************************* //

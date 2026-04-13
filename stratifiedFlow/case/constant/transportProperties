@@ -10,38 +10,27 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      controlDict;
+    object      transportProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     buoyantBoussinesqSimpleFoam;
+phases          (water air);
 
-startFrom       latestTime;
+water
+{
+    transportModel  Newtonian;
+    nu              1e-06;
+    rho             1000;
+}
 
-startTime       0;
+air
+{
+    transportModel  Newtonian;
+    nu              1.48e-05;
+    rho             1;
+}
 
-stopAt          endTime;
+sigma           0.07;
 
-endTime         100000;
-
-deltaT          1;
-
-writeControl    runTime;
-
-writeInterval   100;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
 
 // ************************************************************************* //

@@ -10,38 +10,18 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      controlDict;
+    object      decomposeParDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     buoyantBoussinesqSimpleFoam;
+numberOfSubdomains 4;
 
-startFrom       latestTime;
+method          simple;
 
-startTime       0;
+coeffs
+{
+    n           (2 2 1);
+}
 
-stopAt          endTime;
-
-endTime         100000;
-
-deltaT          1;
-
-writeControl    runTime;
-
-writeInterval   100;
-
-purgeWrite      0;
-
-writeFormat     ascii;
-
-writePrecision  6;
-
-writeCompression off;
-
-timeFormat      general;
-
-timePrecision   6;
-
-runTimeModifiable true;
 
 // ************************************************************************* //
