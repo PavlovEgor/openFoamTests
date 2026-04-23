@@ -28,7 +28,7 @@ deltaT          1;
 
 writeControl    runTime;
 
-writeInterval   100;
+writeInterval   2000;
 
 purgeWrite      0;
 
@@ -44,6 +44,6 @@ timePrecision   6;
 
 runTimeModifiable true;
 
-libs (AmgX4Foam);
+libs (AmgX4Foam petscFoam);
 
 // ************************************************************************* //

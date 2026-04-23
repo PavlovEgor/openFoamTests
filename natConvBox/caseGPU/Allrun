@@ -9,6 +9,8 @@ runApplication blockMesh
 
 runApplication $(getApplication)
 
+# runApplication $(getApplication) -pool fixedSizeMemoryPool -poolSize 1.0
+
 # postProcess -func writeCellCentres
 
 #------------------------------------------------------------------------------

@@ -6,7 +6,8 @@ dataCPU = np.loadtxt('dataCPU.txt')
 dataCPU2 = np.loadtxt('dataCPU2.txt')
 dataCPU3 = np.loadtxt('dataCPU3.txt')
 
-dataGPU = np.loadtxt('dataGPU.txt')
+dataGPU = np.loadtxt('dataGPU_AMGX.txt')
+dataGPUSPUMA = np.loadtxt('dataGPU_SPUMA_AMGX.txt')
 
 
 # Разделяем на колонки
@@ -26,6 +27,10 @@ NsGPU = dataGPU[:, 0]      # первый столбец - ось X
 timeGPU = dataGPU[:, 1]    # второй столбец - первая ось Y
 itNumGPU = dataGPU[:, 2]   # третий столбец - первая ось Y
 
+NsGPUSPUMA = dataGPUSPUMA[:, 0]      # первый столбец - ось X
+timeGPUSPUMA = dataGPUSPUMA[:, 1]    # второй столбец - первая ось Y
+itNumGPUSPUMA = dataGPUSPUMA[:, 2]   # третий столбец - первая ось Y
+
 # Создаем фигуру и основную ось
 fig, ax1 = plt.subplots(figsize=(10, 6))
 
@@ -34,12 +39,14 @@ color1 = 'tab:red'
 color2 = 'tab:blue'
 color3 = 'tab:purple'
 color4 = 'tab:green'
+color5 = 'tab:pink'
 ax1.set_xlabel('Количество ячеек на стороне квадрата')
 ax1.set_ylabel('Время расчета на одну итерацию, c', color='tab:green')
 ax1.plot(NsCPU, timeCPU / itNumCPU, color=color1, marker='o', linestyle='-', label=r'time CPU')
 ax1.plot(NsCPU2, timeCPU2 / itNumCPU2, color=color2, marker='o', linestyle='-', label=r'time 2xCPU')
 ax1.plot(NsCPU3, timeCPU3 / itNumCPU3, color=color3, marker='o', linestyle='-', label=r'time 3xCPU')
-ax1.plot(NsGPU, timeGPU / itNumGPU, color=color4, marker='o', linestyle='--', label=r'time GPU')
+ax1.plot(NsGPU, timeGPU / itNumGPU, color=color4, marker='o', linestyle='--', label=r'time GPU pure AmgX')
+ax1.plot(NsGPUSPUMA, timeGPUSPUMA / itNumGPUSPUMA, color=color5, marker='o', linestyle='--', label=r'time GPU AmgX+SPUMA')
 ax1.tick_params(axis='y', labelcolor='tab:green')
 ax1.legend(loc='upper left')
 ax1.set_xlim(1e2, 

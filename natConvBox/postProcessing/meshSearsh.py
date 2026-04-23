@@ -17,7 +17,7 @@ def processIter(N):
     path = f"../case_{N}/"
 
     formating.createCaseIFromCase(newCasePath=path,
-                            baseCasePath="../caseCPU/")
+                            baseCasePath="../caseGPU/")
 
     formating.setMeshSize(path, N)
 
@@ -36,8 +36,8 @@ if __name__ == "__main__":
     Time = np.zeros(len(Ns))
     itNums = np.zeros(len(Ns))
 
-    with Pool(processes=4) as pool:  # По умолчанию использует все ядра CPU
-        pool.map(processIter, Ns)
+    # with Pool(processes=4) as pool:  # По умолчанию использует все ядра CPU
+    #     pool.map(processIter, Ns)
     
     for ns in Ns:
         processIter(ns)
