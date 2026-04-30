@@ -73,7 +73,7 @@ SIMPLE
     residualControl
     {
         p               1e-2;
-        U               1e-4;
+        U               1e-3;
 
         // possibly check turbulence fields
         "(k|epsilon|omega)" 1e-3;
@@ -84,7 +84,7 @@ relaxationFactors
 {
     fields { p           0.7;
     }
-    equations { U               0.65;
+    equations { U               0.72;
         "(k|epsilon)"   0.7;
     }
 }

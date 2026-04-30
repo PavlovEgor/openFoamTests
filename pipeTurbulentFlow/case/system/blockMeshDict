@@ -44,12 +44,9 @@ vertices
     (-#eval{$R/sqrt(2)} -#eval{$R/sqrt(2)} $l) //15
 );
 
-xcells 6;
-ycells 12;
-zcells 500;
-// xcells 4;
-// ycells 8;
-// zcells 440;
+xcells 4;
+ycells 8;
+zcells 440;
 
 
 stretch 2.0;
