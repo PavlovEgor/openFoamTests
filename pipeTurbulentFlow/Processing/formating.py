@@ -2,6 +2,8 @@ import re
 import os
 import shutil
 
+import numpy as np
+
 
 def setXtoY_inFile(path, 
                    filename,
@@ -23,6 +25,23 @@ def setU(path, U):
                    "0.orig/U",
                    pattern=r'(value\s+uniform\s*\(\s*[\d\.]+\s+[\d\.]+\s+[\d\.]+\s*\);)',
                    replacement=f'value           uniform (0 0 {U});')
+
+def setMeshSize(path, xCells=4, yCells=8, zCells=440):
+
+    setXtoY_inFile(path,
+                   "system/blockMeshDict",
+                   pattern=r'(xcells\s+)\d+;',
+                   replacement=f'xcells {xCells};')
+    
+    setXtoY_inFile(path,
+                   "system/blockMeshDict",
+                   pattern=r'(ycells\s+)\d+;',
+                   replacement=f'ycells {yCells};')
+    
+    setXtoY_inFile(path,
+                   "system/blockMeshDict",
+                   pattern=r'(zcells\s+)\d+;',
+                   replacement=f'zcells {zCells};') 
 
 
 def setStretch(path, stretch):
@@ -84,3 +103,15 @@ def get_last_simulation_time(log_file):
         return last_time, last_exec_time
     else:
         return None, None
+    
+def getDP(casePath):
+    p_data = np.loadtxt(casePath + "postProcessing/probes/0/p", comments='#')
+    return p_data[-1][1]
+
+def getYPlus(casePath):
+    yPlus_data = np.loadtxt(casePath + "postProcessing/yPlus/0/yPlus.dat",     
+                            comments='#',  # Пропускаем строки, начинающиеся с #
+                            usecols=(0, 2, 3, 4)
+                            )
+    
+    return yPlus_data[-1][1], yPlus_data[-1][2], yPlus_data[-1][3]
