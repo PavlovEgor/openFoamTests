@@ -23,7 +23,7 @@ internalField   uniform #eval{($T_left + $T_right) / 2};
 
 boundaryField
 {
-    "(bottom|top|frontAndBack)"
+    "(bottom|top|front|back)"
     {
         type            zeroGradient;
     }
