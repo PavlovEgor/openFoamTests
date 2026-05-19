@@ -42,6 +42,7 @@ if __name__ == "__main__":
     log_max = np.log10(3) + j * log_step
 
     Ns_extended = np.logspace(10**log_min, 10**log_max, 10 + j, dtype=int)
+    # Ns_extended = Ns_extended[::-1]
 
     Time = np.zeros(len(Ns_extended))
     itNums = np.zeros(len(Ns_extended))

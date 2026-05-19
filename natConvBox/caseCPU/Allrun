@@ -9,8 +9,8 @@ runApplication blockMesh
 
 # runApplication decomposePar
 
-# runParallel $(getApplication)
-runApplication $(getApplication)
+runParallel $(getApplication)
+# runApplication $(getApplication) -pool fixedSizeMemoryPool -poolSize 11.0
 
 # runApplication reconstructPar
 

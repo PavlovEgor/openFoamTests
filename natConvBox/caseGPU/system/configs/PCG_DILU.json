@@ -1,6 +1,7 @@
 {
     "config_version": 2, 
     "solver": {
+        "structure_reuse_levels": -1,
         "preconditioner": {
             "print_vis_data": 0,
             "print_solve_stats": 0,

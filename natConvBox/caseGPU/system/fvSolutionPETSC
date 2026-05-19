@@ -20,30 +20,35 @@ solvers
     p_rgh
     {
         solver petsc;
+        tolerance       1e-7;
+        relTol          1e-1;
 
         petsc
         {
             options
             {
-                ksp_type                    cg;
-                ksp_cg_single_reduction     true;
-                ksp_norm_type               none;
-                pc_type                     bjacobi;
-                sub_pc_type                 ilu;
-                sub_pc_factor_levels        "2";
+                ksp_type           cg;
+                ksp_norm_type      none;
+                
+                pc_type            hypre;
+                pc_hypre_type      boomeramg;
+                
+                pc_hypre_boomeramg_relax_type_all  l1scaled-jacobi; 
+                
+                mat_type           aijcusparse;
             }
-            caching
+            caching 
             {
-                matrix          auto;
-                preconditioner  auto;
+                matrix         auto;
+                preconditioner periodic;
+                frequency      10000;
             }
         }
 
-        tolerance       1e-7;
-        relTol          1e-1;
+
     }
 
-    "(U|T|k|epsilon|omega|f|v2)"
+    "(U|Ux|Uy|T|k|epsilon|omega|f|v2)"
     {
         solver            petsc;
         tolerance       1e-7;
@@ -53,16 +58,17 @@ solvers
         {
             options
             {
-                ksp_type                    bicg;
-                pc_type                     bjacobi;
-                sub_pc_type                 ilu;
-                sub_pc_factor_levels        "2";
+                ksp_type bcgs;
+                pc_type pbjacobi;
+                mat_type aijcusparse;
+                ksp_max_it "50";
             }
-
-            caching
+            
+            caching 
             {
-                matrix          auto;
-                preconditioner  auto;
+                matrix         auto;
+                preconditioner periodic;
+                frequency      10000;
             }
         }
     }
