@@ -1,8 +1,8 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  v2412                                 |
-|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website   www.openfoam.com                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -10,6 +10,7 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
+    location    "system";
     object      fvSolution;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -18,22 +19,64 @@ solvers
 {
     p_rgh
     {
-        solver            AmgX;
-        mode              dDDI;
-        dataLocation      device;
+        solver petsc;
+        tolerance       1e-7;
+        relTol          1e-1;
 
-        AmgXconfigPath       "~/OpenFOAM/ubuntu-v2412/run/openFoamTests/natConvBox/caseGPU/system/configs/PCG_DILU.json";
+        petsc
+        {
+            options
+            {
+                ksp_type           cg;
+                ksp_norm_type      none;
+
+                pc_type  gamg;
+                
+                // pc_type            hypre;
+                // pc_hypre_type      boomeramg;
+                
+                // pc_hypre_boomeramg_relax_type_all  l1scaled-jacobi; 
+                
+                // mat_type           aijcusparse;
+                mat_type           aij;
+
+            }
+            caching 
+            {
+                matrix         auto;
+                preconditioner periodic;
+                frequency      10000;
+            }
+        }
 
 
     }
 
-    "(U|Ux|Uy|T)"
+    "(U|Ux|Uy|T|k|epsilon|omega|f|v2)"
     {
-        solver            AmgX;
-        mode              dDDI;
-        dataLocation      device;
+        solver            petsc;
+        tolerance       1e-7;
+        relTol          1e-1;
 
-        AmgXconfigPath       "~/OpenFOAM/ubuntu-v2412/run/openFoamTests/natConvBox/caseGPU/system/configs/PBICGSTAB_CLASSICAL_JACOBI.json";
+        petsc
+        {
+            options
+            {
+                ksp_type bcgs;
+                pc_type  bjacobi;
+                // mat_type aijcusparse;
+                mat_type           aij;
+
+                ksp_max_it "50";
+            }
+            
+            caching 
+            {
+                matrix         auto;
+                preconditioner periodic;
+                frequency      10000;
+            }
+        }
     }
 }
 

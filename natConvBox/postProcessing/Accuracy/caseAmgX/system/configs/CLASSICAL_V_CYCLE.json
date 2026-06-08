@@ -1,0 +1,18 @@
+{
+    "config_version": 2, 
+    "solver": {
+        "solver": "AMG", 
+        "presweeps": 1, 
+        "interpolator": "D2",
+        "max_iters": 100, 
+        "monitor_residual": 1, 
+        "store_res_history": 1,
+        "convergence": "RELATIVE_INI", 
+        "scope": "main", 
+        "max_levels": 100, 
+        "cycle": "V", 
+        "tolerance" : 1e-06, 
+        "norm": "L1_SCALED", 
+        "postsweeps": 1
+    }
+}

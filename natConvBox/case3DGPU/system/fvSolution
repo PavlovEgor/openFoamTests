@@ -1,0 +1,112 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website   www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p_rgh
+    {
+        solver petsc;
+        tolerance       1e-7;
+        relTol          1e-1;
+
+        petsc
+        {
+            options
+            {
+                ksp_type           cg;
+                ksp_norm_type      none;
+
+                pc_type  gamg;
+                
+                // pc_type            hypre;
+                // pc_hypre_type      boomeramg;
+                
+                // pc_hypre_boomeramg_relax_type_all  l1scaled-jacobi; 
+                
+                // mat_type           aijcusparse;
+                mat_type           aij;
+
+            }
+            caching 
+            {
+                matrix         auto;
+                preconditioner periodic;
+                frequency      10000;
+            }
+        }
+
+
+    }
+
+    "(U|Ux|Uy|T|k|epsilon|omega|f|v2)"
+    {
+        solver            petsc;
+        tolerance       1e-7;
+        relTol          1e-1;
+
+        petsc
+        {
+            options
+            {
+                ksp_type fgmres;
+                pc_type  bjacobi;
+                // mat_type aijcusparse;
+                mat_type           aij;
+
+                ksp_max_it "50";
+            }
+            
+            caching 
+            {
+                matrix         auto;
+                preconditioner periodic;
+                frequency      10000;
+            }
+        }
+    }
+}
+
+SIMPLE
+{
+
+    nNonOrthogonalCorrectors 2;
+    pRefCell        0;
+    pRefValue       0;
+
+    residualControl
+    {
+        p_rgh           1e-2;
+        "(U|Ux|Uy)"     1e-3;
+        T               1e-3;
+    }
+}
+
+relaxationFactors
+{
+    fields
+    {
+        p_rgh           0.5;
+    }
+    equations
+    {
+        "(U|Ux|Uy)"     0.8;
+        T               0.9;
+    }
+}
+
+
+// ************************************************************************* //

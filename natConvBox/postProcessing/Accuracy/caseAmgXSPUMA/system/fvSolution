@@ -1,0 +1,69 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p_rgh
+    {
+        solver            AmgX;
+        mode              dDDI;
+        dataLocation      device;
+
+        AmgXconfigPath       "~/OpenFOAM/ubuntu-v2412/run/openFoamTests/natConvBox/caseGPU/system/configs/PCG_DILU.json";
+
+
+    }
+
+    "(U|Ux|Uy|T)"
+    {
+        solver            AmgX;
+        mode              dDDI;
+        dataLocation      device;
+
+        AmgXconfigPath       "~/OpenFOAM/ubuntu-v2412/run/openFoamTests/natConvBox/caseGPU/system/configs/PBICGSTAB_CLASSICAL_JACOBI.json";
+    }
+}
+
+SIMPLE
+{
+
+    nNonOrthogonalCorrectors 2;
+    pRefCell        0;
+    pRefValue       0;
+
+    residualControl
+    {
+        p_rgh           1e-2;
+        "(U|Ux|Uy)"     1e-3;
+        T               1e-3;
+    }
+}
+
+relaxationFactors
+{
+    fields
+    {
+        p_rgh           0.5;
+    }
+    equations
+    {
+        "(U|Ux|Uy)"     0.8;
+        T               0.9;
+    }
+}
+
+
+// ************************************************************************* //

@@ -1,21 +1,31 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+def acc(X, Y):
+    return (Y / (np.exp(lgb) * X ** (k))) ** -1
+
 def plot(ax, data, color, label, marker="o", linestyle="--"):
 
     Ns = data[:, 0]      # первый столбец - ось X
     time = data[:, 1]    # второй столбец - первая ось Y
     itNum = data[:, 2]   # третий столбец - первая ось Y
 
-    ax.plot(Ns**2, time / itNum, color=color, marker=marker, linestyle=linestyle, label=label)
+    ax.plot(Ns**3, time / itNum, color=color, marker=marker, linestyle=linestyle, label=label)
 
 # Загружаем данные из файла
-dataCPU = np.loadtxt('AMGX_CPU_vs_GPU/Inteli7_vs_RTX2060/dataCPU4.txt')
+dataCPU = np.loadtxt('data4CPU_3D.txt')
+dataCPU6 = np.loadtxt('data6CPU_3D.txt')
+dataGPU = np.loadtxt('dataGPU_PETSC_HYPRE_per100.txt')
+data4CPU_PETSC = np.loadtxt('data4CPU_3D_PETSC_fgmres.txt')
 
-dataGPU_PETSC_HYPER_T4 = np.loadtxt('dataGPU_PETSC_HYPER.txt')
-dataGPU_AMGX_T4 = np.loadtxt('dataGPU_AMGX.txt')
-dataGPU_AMGX_SPUMA_T4 = np.loadtxt('dataGPU_AMGX_SPUMA.txt')
+NsCPU = dataCPU[:, 0]      # первый столбец - ось X
+timeCPU = dataCPU[:, 1]    # второй столбец - первая ось Y
+itNumCPU = dataCPU[:, 2]   # третий столбец - первая ось Y
 
+X = np.log(NsCPU**3)
+Y = np.log(timeCPU/itNumCPU)
+k = np.cov(X, Y, ddof=0)[0,1] / np.var(X)
+lgb = np.mean(Y) - k * np.mean(X)
 
 # Создаем фигуру и основную ось
 fig, ax1 = plt.subplots(figsize=(10, 6))
@@ -30,9 +40,12 @@ ax1.set_xlabel('Количество ячеек на стороне квадра
 ax1.set_ylabel('Время расчета на одну итерацию, c', color='tab:green')
 
 plot(ax1, dataCPU, color=color1, marker='o', linestyle='-', label=r'time 4xCPU')
-plot(ax1, dataGPU_PETSC_HYPER_T4, color=color2, marker='o', linestyle='--', label=r'time GPU PETSC HYPRE T4')
-plot(ax1, dataGPU_AMGX_T4, color=color3, marker='o', linestyle='--', label=r'time GPU AmgX T4')
-plot(ax1, dataGPU_AMGX_SPUMA_T4, color=color4, marker='o', linestyle='--', label=r'time GPU SPUMA AmgX T4')
+plot(ax1, dataCPU6, color=color3, marker='o', linestyle='-', label=r'time 6xCPU')
+plot(ax1, dataGPU, color=color2, marker='o', linestyle='--', label=r'time GPU PETSC HYPRE T4')
+plot(ax1, data4CPU_PETSC, color=color4, marker='o', linestyle='--', label=r'4xCPU PETSC')
+ax1.plot(NsCPU**3, np.exp(lgb) * (NsCPU**3) ** (k), color=color4, marker='o', linestyle='-', label="fit")
+# plot(ax1, dataGPU_AMGX_T4, color=color3, marker='o', linestyle='--', label=r'time GPU AmgX T4')
+# plot(ax1, dataGPU_AMGX_SPUMA_T4, color=color4, marker='o', linestyle='--', label=r'time GPU SPUMA AmgX T4')
 
 ax1.tick_params(axis='y', labelcolor='tab:green')
 ax1.legend(loc='upper left')
