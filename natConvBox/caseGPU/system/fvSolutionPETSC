@@ -30,15 +30,15 @@ solvers
                 ksp_type           cg;
                 ksp_norm_type      none;
 
-                pc_type  gamg;
+                // pc_type  gamg;
                 
-                // pc_type            hypre;
-                // pc_hypre_type      boomeramg;
+                pc_type            hypre;
+                pc_hypre_type      boomeramg;
                 
-                // pc_hypre_boomeramg_relax_type_all  l1scaled-jacobi; 
+                pc_hypre_boomeramg_relax_type_all  l1scaled-jacobi; 
                 
-                // mat_type           aijcusparse;
-                mat_type           aij;
+                mat_type           aijcusparse;
+                // mat_type           aij;
 
             }
             caching 
@@ -61,10 +61,10 @@ solvers
         {
             options
             {
-                ksp_type fgmres;
+                ksp_type bcgs;
                 pc_type  bjacobi;
-                // mat_type aijcusparse;
-                mat_type           aij;
+                mat_type aijcusparse;
+                // mat_type           aij;
 
                 ksp_max_it "50";
             }

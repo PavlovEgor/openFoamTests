@@ -1,4 +1,4 @@
-import openfoamparser_mai as Ofpp
+# import openfoamparser_mai as Ofpp
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -17,7 +17,7 @@ def processIter(N):
     path = f"../case_{N}/"
 
     formating.createCaseIFromCase(newCasePath=path,
-                            baseCasePath="../case3DGPU/")
+                            baseCasePath="../caseGPU/")
 
     formating.setMeshSize(path, N)
 
@@ -31,8 +31,8 @@ def processIter(N):
     shutil.rmtree(path)
 
 if __name__ == "__main__":
-    Ns = np.logspace(1.7, 2.3, 10, dtype=int)[:-1]
-    # Ns = np.array([100, 131, 173, 228, 300, 395, 521, 686, 903, 1190, 1567, 2063, 2717], dtype=int)
+    # Ns = np.logspace(1.7, 2.3, 10, dtype=int)[:-1]
+    Ns = np.array( [2063, 2717], dtype=int)
 
     # j = 3
 
